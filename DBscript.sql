@@ -45,14 +45,9 @@ CREATE TABLE Emprestimo (
     DataFimReal DATE
 );
 
-CREATE TABLE CatalogoLivros (
+CREATE TABLE Genero (
     Id SERIAL PRIMARY KEY,
-    Titulo VARCHAR(255),
-    Autor VARCHAR(255),
-    Editora VARCHAR(255),
-    Genero VARCHAR(100),
-    Imagem TEXT,
-    IBSN VARCHAR(20)
+    Nome VARCHAR(100) UNIQUE NOT NULL
 );
 
 -- Tabela Livro: IBSN deve ser único para evitar duplicatas
@@ -85,3 +80,12 @@ FOREIGN KEY (ExemplarId) REFERENCES Exemplar(Id) ON DELETE CASCADE;
 ALTER TABLE CatalogoLivros 
 ADD CONSTRAINT fk_catalogo_livro 
 FOREIGN KEY (IBSN) REFERENCES Livro(IBSN) ON DELETE CASCADE;
+
+-- Atualizando a tabela Livro para usar a chave estrangeira para Gênero
+ALTER TABLE Livro DROP COLUMN Genero;
+
+ALTER TABLE Livro ADD COLUMN GeneroId INT;
+
+ALTER TABLE Livro 
+ADD CONSTRAINT fk_livro_genero 
+FOREIGN KEY (GeneroId) REFERENCES Genero(Id) ON DELETE SET NULL;
