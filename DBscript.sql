@@ -21,7 +21,9 @@ CREATE TABLE Usuario (
     Nome VARCHAR(255),
     Endereco TEXT,
     Telefone VARCHAR(20),
-    Email VARCHAR(255)
+    Email VARCHAR(255),
+    Senha VARCHAR(255),
+    Role VARCHAR(5) DEFAULT 'USER' RESTRICT('USER', 'ADMIN')
 );
 
 CREATE TABLE Reserva (
@@ -52,3 +54,34 @@ CREATE TABLE CatalogoLivros (
     Imagem TEXT,
     IBSN VARCHAR(20)
 );
+
+-- Tabela Livro: IBSN deve ser único para evitar duplicatas
+ALTER TABLE Livro ADD CONSTRAINT unique_ibsn UNIQUE (IBSN);
+
+-- Exemplar pertence a um Livro pelo IBSN
+ALTER TABLE Exemplar 
+ADD CONSTRAINT fk_exemplar_livro 
+FOREIGN KEY (IBSN) REFERENCES Livro(IBSN) ON DELETE CASCADE;
+
+-- Reserva está relacionada a um Usuário e a um Exemplar
+ALTER TABLE Reserva 
+ADD CONSTRAINT fk_reserva_usuario 
+FOREIGN KEY (UserId) REFERENCES Usuario(Id) ON DELETE CASCADE;
+
+ALTER TABLE Reserva 
+ADD CONSTRAINT fk_reserva_exemplar 
+FOREIGN KEY (ExemplarId) REFERENCES Exemplar(Id) ON DELETE CASCADE;
+
+-- Empréstimo está relacionado a um Usuário e a um Exemplar
+ALTER TABLE Emprestimo 
+ADD CONSTRAINT fk_emprestimo_usuario 
+FOREIGN KEY (UserId) REFERENCES Usuario(Id) ON DELETE CASCADE;
+
+ALTER TABLE Emprestimo 
+ADD CONSTRAINT fk_emprestimo_exemplar 
+FOREIGN KEY (ExemplarId) REFERENCES Exemplar(Id) ON DELETE CASCADE;
+
+-- Catálogo de Livros deveria estar vinculado ao Livro pelo IBSN
+ALTER TABLE CatalogoLivros 
+ADD CONSTRAINT fk_catalogo_livro 
+FOREIGN KEY (IBSN) REFERENCES Livro(IBSN) ON DELETE CASCADE;
