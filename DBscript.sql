@@ -1,6 +1,7 @@
 CREATE TABLE Exemplar (
     Id SERIAL PRIMARY KEY,
-    IBSN VARCHAR(20) NOT NULL
+    IBSN VARCHAR(20) NOT NULL,
+    Status VARCHAR(20)
 );
 
 CREATE TABLE Livro (
@@ -32,8 +33,7 @@ CREATE TABLE Reserva (
     ExemplarId INT,
     DataInicio DATE,
     DataFimPrevista DATE,
-    DataFimReal DATE,
-    Status VARCHAR(50)
+    DataFimReal DATE
 );
 
 CREATE TABLE Emprestimo (
@@ -42,7 +42,8 @@ CREATE TABLE Emprestimo (
     ExemplarId INT,
     DataInicio DATE,
     DataFimPrevista DATE,
-    DataFimReal DATE
+    DataFimReal DATE,
+    Status VARCHAR(20)
 );
 
 CREATE TABLE Genero (
